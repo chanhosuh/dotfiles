@@ -1,0 +1,12 @@
+PATH=~/.local/bin:$PATH
+
+set -o vi
+export PS1="\u@\h:\W $ "
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Work
+source /anaconda3/bin/virtualenvwrapper.sh
+
+alias ll='ls -hal'
+alias lt='ls -halrt'
+
