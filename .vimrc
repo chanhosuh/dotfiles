@@ -23,3 +23,5 @@ nnoremap <C-L> :nohl<CR><C-L>
 nmap <F1> :NERDTreeToggle<CR>
 
 set mouse=a
+
+"test hard link
