@@ -1,4 +1,4 @@
-PATH=~/.local/bin:$PATH
+export PATH="~/.local/bin:$PATH"
 
 set -o vi
 export PS1="\u@\h:\W $ "
@@ -9,4 +9,7 @@ source /anaconda3/bin/virtualenvwrapper.sh
 
 alias ll='ls -hal'
 alias lt='ls -halrt'
+
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-backward'
 
