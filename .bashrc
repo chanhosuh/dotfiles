@@ -1,4 +1,4 @@
-export PATH="~/.local/bin:$PATH"
+export PATH="~/bin:~/.local/bin:$PATH"
 
 set -o vi
 export PS1="\u@\h:\W $ "
@@ -13,3 +13,4 @@ alias lt='ls -halrt'
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-backward'
 
+alias goo='googler --count 6 --colors egmkxm'

@@ -5,6 +5,7 @@ set hlsearch
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+autocmd FileType make setlocal noexpandtab
 
 execute pathogen#infect()
 syntax on
@@ -24,3 +25,12 @@ nmap <F1> :NERDTreeToggle<CR>
 
 set mouse=a
 
+if &term =~ "xterm\\|rxvt"
+   " use an red cursor in insert mode
+   let &t_SI = "\<Esc>]12;red\x7"
+   " use an orange-ish cursor otherwise
+   let &t_EI = "\<Esc>]12;\#FFA560\x7"
+   silent !echo -ne "\033]12;\#FFA560\007"
+   " reset cursor when vim exits
+   autocmd VimLeave * silent !echo -ne "\033]112\007"
+endif
