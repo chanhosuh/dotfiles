@@ -1,4 +1,4 @@
-export PATH="~/bin:~/.local/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 set -o vi
 export PS1="\u@\h:\W $ "
