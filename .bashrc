@@ -11,6 +11,6 @@ alias ll='ls -hal'
 alias lt='ls -halrt'
 
 bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-backward'
+bind '"\e[B": history-search-forward'
 
 alias goo='googler --count 6 --colors egmkxm'
