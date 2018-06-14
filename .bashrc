@@ -1,7 +1,9 @@
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 set -o vi
-export PS1="\u@\h:\W $ "
+# export PS1="\u@\h:\W $ "
+export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]\n\$ '
+
 
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Work
