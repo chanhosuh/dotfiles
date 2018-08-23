@@ -10,6 +10,8 @@ set softtabstop=4
 set expandtab
 autocmd FileType make setlocal noexpandtab
 
+autocmd Filetype gitcommit setlocal spell textwidth=72
+
 execute pathogen#infect()
 syntax on
 filetype indent plugin on

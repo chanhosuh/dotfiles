@@ -2,7 +2,6 @@ export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 set -o vi
 
-
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Work
 source /anaconda3/bin/virtualenvwrapper.sh
@@ -10,8 +9,14 @@ source /anaconda3/bin/virtualenvwrapper.sh
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 export GIT_PS1_SHOWUPSTREAM="auto"
 
-# export PS1="\u@\h:\W $ "
-export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)\n\$ '
+docker_ps1() {
+  if [[ `docker ps -q` != "" ]]; then
+    echo " 🐳"
+  else
+    echo
+  fi
+}
+export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)$(docker_ps1)\n\$ '
 
 alias ll='ls -hal'
 alias lt='ls -halrt'
