@@ -27,6 +27,6 @@ bind '"\e[B": history-search-forward'
 alias goo='googler --count 6 --colors egmkxm'
 
 alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d %Creset %s , %Cblue%cn" --graph'
-alias git-shortlog='git shortlog --format=format:"%h %ar %d %s"'
+alias git-shortlog='git shortlog --format=format:"%h %ar %s"'
 alias git-refresh='git fetch && git-log -5 --all'
 
