@@ -10,6 +10,8 @@ source /anaconda3/bin/virtualenvwrapper.sh
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 export GIT_PS1_SHOWUPSTREAM="auto"
 
+source ~/bin/.git-completion.bash
+
 docker_ps1() {
   if [[ `docker ps -q` != "" ]]; then
     echo " 🐳"
@@ -26,6 +28,13 @@ bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
 alias goo='googler --count 6 --colors egmkxm'
+
+# --- port stuff --- #
+
+# check ports listening
+port-listeners() { lsof -i -P -n | grep LISTEN; }
+# kill process on given port
+kill-port() { kill -9 "$(lsof -t -i :$1)"; }
 
 # --- GIT shortcuts --- #
 alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d %Creset %s , %Cblue%an" --graph'
