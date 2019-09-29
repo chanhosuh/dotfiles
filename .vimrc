@@ -1,6 +1,7 @@
 set nocompatible
 set number
 set hlsearch
+set incsearch
 
 set ignorecase
 set smartcase
@@ -30,12 +31,24 @@ nmap <F1> :NERDTreeToggle<CR>
 
 set mouse=a
 
-if &term =~ "xterm\\|rxvt"
-   " use an red cursor in insert mode
-   let &t_SI = "\<Esc>]12;red\x7"
-   " use an orange-ish cursor otherwise
-   let &t_EI = "\<Esc>]12;\#FFA560\x7"
-   silent !echo -ne "\033]12;\#FFA560\007"
-   " reset cursor when vim exits
-   autocmd VimLeave * silent !echo -ne "\033]112\007"
-endif
+" cursor shape
+" https://www.iterm2.com/documentation-escape-codes.html
+" ^[]1337;CursorShape=N^G
+" where N=0, 1, or 2.
+" 0: Block
+" 1: Vertical bar
+" 2: Underline
+let &t_SI = "\<Esc>]1337;CursorShape=2\x7"
+let &t_EI = "\<Esc>]1337;CursorShape=0\x7"
+
+
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['flake8']
