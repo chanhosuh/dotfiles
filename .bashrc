@@ -1,4 +1,4 @@
-export PATH="$HOME/bin:$HOME/.local/bin:/anaconda3/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/anaconda3/bin:$PATH"
 
 set -o vi
 
@@ -46,3 +46,13 @@ alias git-summary='git fetch && git-shortlog --all'
 alias git-refresh-day='git fetch && git-log --all --since="1 day ago"'
 alias git-summary-day='git fetch && git-shortlog --all --since="1 day ago"'
 # --- end GIT shortcuts --- #
+
+source local_env_vars
+ssh-ec2() { ssh -i ~/.ssh/${PEM_KEY} ${EC2_HOST}; }
+
+NPM_PACKAGES="${HOME}/.npm-packages"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+
+# Unset manpath so we can inherit from /etc/manpath via the `manpath` command
+unset MANPATH # delete if you already modified MANPATH elsewhere in your config
+export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
