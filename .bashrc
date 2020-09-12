@@ -1,16 +1,25 @@
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/anaconda3/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+# remove annoying OS X bash deprecation warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
 
 set -o vi
 
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Work
-# export VIRTUALENVWRAPPER_PYTHON=/anaconda3/bin/python
-source /anaconda3/bin/virtualenvwrapper.sh
+PYTHON_HOME=/Library/Frameworks/Python.framework/Versions/3.8/bin
+export VIRTUALENVWRAPPER_PYTHON=${PYTHON_HOME}/python3
+source ${PYTHON_HOME}/virtualenvwrapper.sh
 
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 export GIT_PS1_SHOWUPSTREAM="auto"
 
 source ~/bin/.git-completion.bash
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
 
 docker_ps1() {
   if [[ `docker ps -q` != "" ]]; then
@@ -19,7 +28,8 @@ docker_ps1() {
     echo
   fi
 }
-export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)$(docker_ps1)\n\$ '
+# export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)$(docker_ps1)\n\$ '
+export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)\n\$ '
 
 alias ll='ls -hal'
 alias lt='ls -halrt'
@@ -45,14 +55,15 @@ alias git-summary='git fetch && git-shortlog --all'
 
 alias git-refresh-day='git fetch && git-log --all --since="1 day ago"'
 alias git-summary-day='git fetch && git-shortlog --all --since="1 day ago"'
+
+alias git-status='git status --porcelain'
 # --- end GIT shortcuts --- #
 
 source local_env_vars
 ssh-ec2() { ssh -i ~/.ssh/${PEM_KEY} ${EC2_HOST}; }
 
-NPM_PACKAGES="${HOME}/.npm-packages"
-export PATH="$NPM_PACKAGES/bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Unset manpath so we can inherit from /etc/manpath via the `manpath` command
-unset MANPATH # delete if you already modified MANPATH elsewhere in your config
-export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
