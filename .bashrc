@@ -28,8 +28,8 @@ docker_ps1() {
     echo
   fi
 }
-# export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)$(docker_ps1)\n\$ '
-export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)\n\$ '
+export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)$(docker_ps1)\n\$ '
+# export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)\n\$ '
 
 alias ll='ls -hal'
 alias lt='ls -halrt'
@@ -47,7 +47,8 @@ port-listeners() { lsof -i -P -n | grep LISTEN; }
 kill-port() { kill -9 "$(lsof -t -i :$1)"; }
 
 # --- GIT shortcuts --- #
-alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d %Creset %s , %Cblue%an" --graph'
+alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d%Creset, %Cblue%an %Creset%n""        %s" --graph'
+# alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d %Creset %s , %Cblue%an" --graph'
 alias git-shortlog='git shortlog --format=format:"%h %s, %ar"'
 
 alias git-refresh='git fetch && git-log --all'
@@ -59,6 +60,14 @@ alias git-summary-day='git fetch && git-shortlog --all --since="1 day ago"'
 alias git-status='git status --porcelain'
 # --- end GIT shortcuts --- #
 
+string-length() {
+    python -c "print(len('$1'))";
+}
+
+top_process() {
+    top -pid $(pgrep $1 | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ -pid /g');
+}
+
 source local_env_vars
 ssh-ec2() { ssh -i ~/.ssh/${PEM_KEY} ${EC2_HOST}; }
 
@@ -67,3 +76,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '~/google-cloud-sdk/path.bash.inc' ]; then . '~/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '~/google-cloud-sdk/completion.bash.inc' ]; then . '~/google-cloud-sdk/completion.bash.inc'; fi
+
