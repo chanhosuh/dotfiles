@@ -15,7 +15,7 @@ source ${PYTHON_HOME}/virtualenvwrapper.sh
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 export GIT_PS1_SHOWUPSTREAM="auto"
 
-source ~/bin/.git-completion.bash
+source $HOME/bin/.git-completion.bash
 
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
@@ -69,7 +69,7 @@ top_process() {
 }
 
 source local_env_vars
-ssh-ec2() { ssh -i ~/.ssh/${PEM_KEY} ${EC2_HOST}; }
+ssh-ec2() { ssh -i $HOME/ssh/${PEM_KEY} ${EC2_HOST}; }
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -78,8 +78,8 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '~/google-cloud-sdk/path.bash.inc' ]; then . '~/google-cloud-sdk/path.bash.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/path.bash.inc" ]; then . "$HOME/google-cloud-sdk/path.bash.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '~/google-cloud-sdk/completion.bash.inc' ]; then . '~/google-cloud-sdk/completion.bash.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/completion.bash.inc" ]; then . "$HOME/google-cloud-sdk/completion.bash.inc"; fi
 
