@@ -39,13 +39,6 @@ bind '"\e[B": history-search-forward'
 
 alias goo='googler --count 6 --colors egmkxm'
 
-# --- port stuff --- #
-
-# check ports listening
-port-listeners() { lsof -i -P -n | grep LISTEN; }
-# kill process on given port
-kill-port() { kill -9 "$(lsof -t -i :$1)"; }
-
 # --- GIT shortcuts --- #
 alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d%Creset, %Cblue%an %Creset%n""        %s" --graph'
 # alias git-log='git log --pretty=format:"%C(yellow)%h %C(green)%ar %C(auto)%d %Creset %s , %Cblue%an" --graph'
@@ -58,15 +51,38 @@ alias git-refresh-day='git fetch && git-log --all --since="1 day ago"'
 alias git-summary-day='git fetch && git-shortlog --all --since="1 day ago"'
 
 alias git-status='git status --porcelain'
+
+alias git-merges='git log --merges --first-parent --pretty=format:"%h %<(10,trunc)%aN %C(white)%<(15)%ar%Creset %C(red bold)%<(15)%D%Creset %s"'
 # --- end GIT shortcuts --- #
 
-string-length() {
-    python -c "print(len('$1'))";
-}
+# --- custom commands --- #
 
-top_process() {
+# check ports listening
+port-listeners() { lsof -i -P -n | grep LISTEN; }
+# kill process on given port
+kill-port() { kill -9 "$(lsof -t -i :$1)"; }
+
+# show top processes with given name
+top-process() {
     top -pid $(pgrep $1 | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ -pid /g');
 }
+
+timestamp() {
+    date +%s
+}
+
+string-length() {
+    python3 -c "print(len('$1'))";
+}
+
+# convert between eth and wei
+to-wei() {
+    python3 -c "from decimal import Decimal as D;  print((D('$1') * D('1' + '0' * 18)).quantize(D('1')))"
+}
+from-wei() {
+    python3 -c "from decimal import Decimal as D;  print(D('$1') / D('1' + '0' * 18))"
+}
+
 
 source local_env_vars
 ssh-ec2() { ssh -i $HOME/ssh/${PEM_KEY} ${EC2_HOST}; }
