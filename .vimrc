@@ -10,8 +10,8 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 autocmd FileType make setlocal noexpandtab
-
 autocmd Filetype gitcommit setlocal spell textwidth=72
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 execute pathogen#infect()
 syntax on
@@ -30,6 +30,9 @@ nnoremap <C-L> :nohl<CR><C-L>
 nmap <F1> :NERDTreeToggle<CR>
 
 set mouse=a
+
+set number                     " Show current line number
+" set relativenumber             " Show relative line numbers
 
 " cursor shape
 " https://www.iterm2.com/documentation-escape-codes.html
