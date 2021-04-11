@@ -1,5 +1,8 @@
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:${PATH}"
+export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+PYTHON_HOME=/Library/Frameworks/Python.framework/Versions/3.8/bin
+export PATH="${PYTHON_HOME}:${PATH}"
 
 # remove annoying OS X bash deprecation warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -8,7 +11,6 @@ set -o vi
 
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Work
-PYTHON_HOME=/Library/Frameworks/Python.framework/Versions/3.8/bin
 export VIRTUALENVWRAPPER_PYTHON=${PYTHON_HOME}/python3
 source ${PYTHON_HOME}/virtualenvwrapper.sh
 
