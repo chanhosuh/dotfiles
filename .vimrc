@@ -48,33 +48,72 @@ set relativenumber             " Show relative line numbers
 let &t_SI = "\<Esc>]1337;CursorShape=2\x7"
 let &t_EI = "\<Esc>]1337;CursorShape=0\x7"
 
+" Commenting blocks of code.
+augroup commenting_blocks_of_code
+  autocmd!
+  autocmd FileType c,cpp,java,javascript,scala,solidity let b:comment_leader = '// '
+  autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+  autocmd FileType conf,fstab       let b:comment_leader = '# '
+  autocmd FileType tex              let b:comment_leader = '% '
+  autocmd FileType mail             let b:comment_leader = '> '
+  autocmd FileType vim              let b:comment_leader = '" '
+augroup END
+noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> ,cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
+
 " buffer management
 set hidden
 nnoremap gb :ls<CR>:b
 nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
-" syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-"
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-" let g:syntastic_python_checkers = ['flake8']
+" Always draw sign column. Prevent buffer moving when adding/deleting sign.
+set signcolumn=yes
 
+" python3 installed by brew as a vim dependency
 let g:python3_host_prog = '/usr/local/bin/python3'
-let g:deoplete#enable_at_startup = 1
 
-" deoplete settings:
-" <TAB>: completion. :-/
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" NERDTree
+nmap <F1> :NERDTreeToggle<CR>
+" nnoremap \d :bp<cr>:bd #<cr>
+nnoremap <Leader>d :Bdelete<CR>
+" Start NERDTree when Vim is started without file arguments.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
 
-" TernJS settings:
-let g:deoplete#sources#ternjs#docs = 1
+" coc.nvim
+if exists('*complete_info')
+  inoremap <silent><expr> <cr> complete_info(['selected'])['selected'] != -1 ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+" navigate completion list with tab/shift-tab (deoplete or coc)
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
 
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+" default: 4000 ms
+set updatetime=300
+
+" ALE
+nmap <F3> :ALEGoToDefinition<CR>
+nmap <F2> :ALERename<CR>
+
+" vim-prettier
 let g:prettier#autoformat_require_pragma = 0
 let g:prettier#autoformat_config_present = 1
+let g:prettier#quickfix_enabled=0
+
+" Command T
+set wildignore+=node_modules
 
