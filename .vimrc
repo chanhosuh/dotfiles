@@ -16,8 +16,11 @@ autocmd FileType make setlocal noexpandtab
 autocmd Filetype gitcommit setlocal spell textwidth=72
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType json setlocal ts=2 sts=2 sw=2 expandtab
 
 set encoding=utf-8
+
+set autoread
 
 execute pathogen#infect()
 syntax on
@@ -113,6 +116,7 @@ nmap <F2> :ALERename<CR>
 let g:prettier#autoformat_require_pragma = 0
 let g:prettier#autoformat_config_present = 1
 let g:prettier#quickfix_enabled=0
+autocmd BufWritePre *.sol Prettier
 
 " Command T
 set wildignore+=node_modules
