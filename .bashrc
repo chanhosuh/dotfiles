@@ -18,6 +18,9 @@ source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 export GIT_PS1_SHOWUPSTREAM="auto"
 
 source $HOME/bin/.git-completion.bash
+# use extended `cd` command from:
+# https://linuxgazette.net/109/marinov.html
+source $HOME/bin/acd_func.sh
 
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
@@ -83,6 +86,10 @@ to-wei() {
 }
 from-wei() {
     python3 -c "from decimal import Decimal as D;  print(D('$1') / D('1' + '0' * 18))"
+}
+
+coingecko() {
+    echo $(curl -s "https://api.coingecko.com/api/v3/simple/price?ids=$1&vs_currencies=usd")
 }
 
 
