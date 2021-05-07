@@ -76,6 +76,8 @@ set signcolumn=yes
 " python3 installed by brew as a vim dependency
 let g:python3_host_prog = '/usr/local/bin/python3'
 
+let g:ale_solidity_solc_options = '@openzeppelin/=$(pwd)/node_modules/@openzeppelin/ @chainlink/=$(pwd)/node_modules/@chainlink/ contracts/**/*.sol --allow-paths=$(pwd) --optimize --optimize-runs=999999 --old-reporter'
+
 " NERDTree
 nmap <F1> :NERDTreeToggle<CR>
 " nnoremap \d :bp<cr>:bd #<cr>
