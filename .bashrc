@@ -4,6 +4,8 @@ export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app
 PYTHON_HOME=/Library/Frameworks/Python.framework/Versions/3.8/bin
 export PATH="${PYTHON_HOME}:${PATH}"
 
+export CDPATH=.:$HOME:$HOME/git
+
 # remove annoying OS X bash deprecation warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -108,3 +110,6 @@ if [ -f "$HOME/google-cloud-sdk/path.bash.inc" ]; then . "$HOME/google-cloud-sdk
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/google-cloud-sdk/completion.bash.inc" ]; then . "$HOME/google-cloud-sdk/completion.bash.inc"; fi
 
+compile-solidity() {
+    solc @openzeppelin/=$(pwd)/node_modules/@openzeppelin/ @chainlink/=$(pwd)/node_modules/@chainlink/ contracts/**/*.sol --allow-paths=$(pwd) --optimize --optimize-runs=999999
+}
