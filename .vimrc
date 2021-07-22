@@ -36,6 +36,9 @@ nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 "until the next search
 nnoremap <C-L> :nohl<CR><C-L>
 
+highlight CursorLine ctermbg=Black
+set cursorline
+
 set mouse=a
 
 set number                     " Show current line number
