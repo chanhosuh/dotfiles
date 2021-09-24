@@ -29,7 +29,8 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 
 docker_ps1() {
-  if [[ `docker ps -q` != "" ]]; then
+  ids=`docker ps -q 2>/dev/null`
+  if [[ "${ids}" != "" ]]; then
     echo " 🐳"
   else
     echo
@@ -60,6 +61,8 @@ alias git-summary-day='git fetch && git-shortlog --all --since="1 day ago"'
 alias git-status='git status --porcelain'
 
 alias git-merges='git log --merges --first-parent --pretty=format:"%h %<(10,trunc)%aN %C(white)%<(15)%ar%Creset %C(red bold)%<(15)%D%Creset %s"'
+
+alias git-branch='git branch -vv --sort=-committerdate'
 # --- end GIT shortcuts --- #
 
 # --- custom commands --- #
