@@ -12,7 +12,7 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 set -o vi
 
 export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/Work
+export PROJECT_HOME=$HOME/git
 export VIRTUALENVWRAPPER_PYTHON=${PYTHON_HOME}/python3
 source ${PYTHON_HOME}/virtualenvwrapper.sh
 
@@ -28,16 +28,7 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
 fi
 
-docker_ps1() {
-  ids=`docker ps -q 2>/dev/null`
-  if [[ "${ids}" != "" ]]; then
-    echo " 🐳"
-  else
-    echo
-  fi
-}
-export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)$(docker_ps1)\n\$ '
-# export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)\n\$ '
+source local_env_vars
 
 alias ll='ls -hal'
 alias lt='ls -halrt'
@@ -93,12 +84,6 @@ from-wei() {
     python3 -c "from decimal import Decimal as D;  print(D('$1') / D('1' + '0' * 18))"
 }
 
-coingecko() {
-    echo $(curl -s "https://api.coingecko.com/api/v3/simple/price?ids=$1&vs_currencies=usd")
-}
-
-
-source local_env_vars
 ssh-ec2() { ssh -i $HOME/ssh/${PEM_KEY} ${EC2_HOST}; }
 
 export NVM_DIR="$HOME/.nvm"
@@ -116,3 +101,34 @@ if [ -f "$HOME/google-cloud-sdk/completion.bash.inc" ]; then . "$HOME/google-clo
 compile-solidity() {
     solc @openzeppelin/=$(pwd)/node_modules/@openzeppelin/ @chainlink/=$(pwd)/node_modules/@chainlink/ contracts/**/*.sol --allow-paths=$(pwd) --optimize --optimize-runs=999999
 }
+
+docker_ps1() {
+  ids=`docker ps -q 2>/dev/null`
+  if [[ "${ids}" != "" ]]; then
+    echo " 🐳"
+  else
+    echo
+  fi
+}
+
+coingecko() {
+    echo $(curl -s "https://api.coingecko.com/api/v3/simple/price?ids=$1&vs_currencies=usd")
+}
+
+price() {
+   json=`coingecko $1`;
+   python3 -c "\
+import json ;\
+from decimal import Decimal as D;
+d = json.loads('${json}') ;\
+price = d['$1']['usd'] ;\
+print(round(D(price), $2))";
+}
+
+export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1) $(docker_ps1)\n\$ '
+# export PS1='\[\e[32m\]\u@\h: \[\e[33m\]\w\[\e[0m\]$(__git_ps1)\n\$ '
+
+infura_test() {
+    curl -i -X POST https://mainnet.infura.io/v3/${WEB3_INFURA_PROJECT_ID} -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params": [],"id":1}'
+}
+
