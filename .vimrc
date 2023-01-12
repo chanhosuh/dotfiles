@@ -54,6 +54,11 @@ set relativenumber             " Show relative line numbers
 let &t_SI = "\<Esc>]1337;CursorShape=2\x7"
 let &t_EI = "\<Esc>]1337;CursorShape=0\x7"
 
+" Print to PDF
+set printfont=Courier:h8  " font size 8; can't change font type!
+set printoptions=header:0  " no header
+command! -range=% HardcopyPdf <line1>,<line2> hardcopy > %.ps | !ps2pdf %.ps && rm %.ps && echo 'Created: %.pdf'
+
 " Commenting blocks of code.
 augroup commenting_blocks_of_code
   autocmd!
@@ -79,9 +84,12 @@ set signcolumn=yes
 " python3 installed by brew as a vim dependency
 let g:python3_host_prog = '/usr/local/bin/python3'
 
-let g:ale_solidity_solc_options = '@openzeppelin/=$(pwd)/node_modules/@openzeppelin/ @chainlink/=$(pwd)/node_modules/@chainlink/ contracts/**/*.sol --allow-paths=$(pwd) --optimize --optimize-runs=999999 --old-reporter'
+let g:ale_solidity_solc_options = '@openzeppelin/=$(pwd)/node_modules/@openzeppelin/ @chainlink/=$(pwd)/node_modules/@chainlink/ @gnosis.pm/=$(pwd)/node_modules/@gnosis.pm/ contracts/**/*.sol --allow-paths=$(pwd) --optimize --optimize-runs=999999 --old-reporter'
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree
+"""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <F1> :NERDTreeToggle<CR>
 " nnoremap \d :bp<cr>:bd #<cr>
 nnoremap <Leader>d :Bdelete<CR>
@@ -91,38 +99,71 @@ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 " Exit Vim if NERDTree is the only window left.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
+let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.swp$', '\.swo$' ]
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
 " coc.nvim
-if exists('*complete_info')
-  inoremap <silent><expr> <cr> complete_info(['selected'])['selected'] != -1 ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+"""""""""""""""""""""""""""""""""""""""""""""""""
+inoremap <silent><expr> <cr> coc#pum#visible() && coc#pum#info()['index'] != -1 ? coc#pum#confirm() : "\<C-g>u\<CR>"
 " navigate completion list with tab/shift-tab (deoplete or coc)
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
+function! CheckBackspace() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
 
-" default: 4000 ms
 set updatetime=300
 
-" ALE
-nmap <F3> :ALEGoToDefinition<CR>
-nmap <F2> :ALERename<CR>
+" goto definition
+nmap <F3> <Plug>(coc-type-definition)
+" symbol renaming.
+nmap <F2> <Plug>(coc-rename)
 
+nmap <silent> gr <Plug>(coc-references)
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" ALE
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" Mappings if you use language-server through ALE
+" as with ts-server.  Otherwise, it's best to go
+" through COC and e.g. coc-pyright.
+"
+" nmap <F3> :ALEGoToDefinition<CR>
+" nmap <F2> :ALERename<CR>
+" nmap <F4> :ALEImport<CR>
+
+" vim-virtualenv plugin ensures these are found
+let g:ale_fixers = {}
+let g:ale_fixers.python = ['black', 'isort']
+let g:ale_fix_on_save = 1
+let g:ale_linters = {}
+let g:ale_linters.python = ['flake8', 'pylint']
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-prettier
+"""""""""""""""""""""""""""""""""""""""""""""""""
 let g:prettier#autoformat_require_pragma = 0
 let g:prettier#autoformat_config_present = 1
 let g:prettier#quickfix_enabled=0
+" autocmd BufWritePre *.sol PrettierAsync
 autocmd BufWritePre *.sol Prettier
+" let g:prettier#partial_format=1
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
 " Command T
+"""""""""""""""""""""""""""""""""""""""""""""""""
 set wildignore+=node_modules
 
